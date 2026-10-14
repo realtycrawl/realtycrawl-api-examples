@@ -39,3 +39,7 @@ npm run test:live
 Offline tests use synthetic data and mock transports. Live verification fetches only public metadata and OpenAPI; it spends no credits.
 
 [Documentation](https://docs.realtycrawl.dev) · [MCP](https://github.com/realtycrawl/realtycrawl-mcp) · [Agent skills](https://github.com/realtycrawl/realtycrawl-agent-skills) · [Examples](https://github.com/realtycrawl/realtycrawl-api-examples)
+
+## Release compatibility
+
+The examples target the application’s 50-credit-per-platform source-crawl update. At verification on 2026-10-14, the live OpenAPI still advertised the previous 1-credit source price. `X-Max-Credits` is a maximum budget, not a charge; the deployed contract and `X-Credits-Used` determine the actual cost. Coordinate the documentation cutover with the application release.
