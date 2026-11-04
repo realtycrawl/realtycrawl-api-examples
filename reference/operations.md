@@ -1,6 +1,6 @@
 # Packaged API operation inventory
 
-Generated from the application OpenAPI by `scripts/package-public-repos.mjs`. This release defines 49 operation templates. Check the live OpenAPI and capabilities for current source, market and selector availability; research and unavailable operations are not callable. Documentation-backed beta has offline contract evidence, without fresh live verification.
+Generated from the application OpenAPI by `scripts/package-public-repos.mjs`. This release defines 52 operation templates. Check the live OpenAPI and capabilities for current source, market and selector availability; research and unavailable operations are not callable. Documentation-backed beta has offline contract evidence, without fresh live verification.
 
 | Operation ID | Method and path | Status | Credit unit |
 |---|---|---|---|
@@ -53,5 +53,8 @@ Generated from the application OpenAPI by `scripts/package-public-repos.mjs`. Th
 | getListingNearby | GET /v1/listings/{listing_id}/nearby | beta | stored_observation_read |
 | getListingProfessional | GET /v1/listings/{listing_id}/agent | beta | stored_observation_read |
 | batchZillowListings | POST /v1/zillow/listings/batch | beta | successful_source_detail |
+| batchPlatformListings | POST /v1/{platform}/listings/batch | beta | successful_source_detail |
+| batchReadObservations | POST /v1/observations/batch | beta | successful_stored_observation_read |
+| getMarket | GET /v1/markets/{market_id} | beta | stored_observation_read |
 
-Response-only `fields` and `format` controls apply to data operations. They do not change source input or billing. Metadata is free; stored reads cost 1 credit. Zillow listing searches cost 3 credits per returned result; fresh details cost 50 per successful item. Batches reserve 50 credits per requested ZPID (1–5) and refund failures. Check operation pricing in the live contract.
+Response-only `fields` and `format` controls apply to data operations. They do not change source input or billing. Metadata is free; stored reads cost 1 credit. Zillow listing searches cost 3 credits per returned result; fresh details cost 50 per successful item. Source-detail batches reserve 50 credits per requested item (1–5); saved-observation batches reserve 1 per requested read (1–25). Failed items refund their reservation. Check operation pricing in the live contract.
