@@ -62,7 +62,13 @@ Zillow listing searches cost 3 credits per returned listing (default limit 10); 
 
 ## Cross-platform workflows
 
-The contract supports retained property facts for 183 listing sources, source-detail batches for 31 additional platforms, and saved-observation batches across all 196 in-scope sources. Source availability remains operation-specific; new bindings are documentation/offline-test backed.
+The contract documents source-specific listing and stay filters, exact source-detail selectors, typed retained energy/flood/planning context, and saved-observation batches across the 196 in-scope sources. Fresh listing and stay detail beta requires explicit operator enablement. New bindings have documentation and offline-test evidence; check live capabilities before executing.
+
+`getMarketSummary` derives growth from the official FHFA state index; `getPropertyZoning` reads retained NYC tax-lot labels and ratios without legal interpretation. Stay media/context reads preserve source unknowns and cost one credit; fresh supported stay details cost 50 credits on success. See the generated operation inventory for exact source associations and inputs.
+
+`getListingLeaseTerms` reads saved commercial space counts, area ranges and labeled asking rates from CommercialCafe, CommercialSearch, CityFeet and PropertyShark. `getListingLayoutOptions` reads advertised rental ranges from Rentals.ca and Point2Homes. Both cost one credit and keep unit identity and current availability unverified. Rentals.ca documents five city regions; US state searches, HomeFinder ZIP selectors, Bproperty areas and a single Graana source page have separate documented beta scopes.
+
+Additional source URL filters are documented for Redfin condos by US ZIP, Domain exact 1–3 bedroom apartments in Sydney NSW 2000, and Property24 positive ZAR bounds/minimum bedrooms within its source-area path. Exact REW Vancouver house, Booli Stockholm apartment and Coldwell Banker Austin condo details require separate opt-in beta enablement. REW is URL-only; source bids, tax observations and partial bathrooms keep their original meaning. These additions have offline contract evidence without fresh provider acceptance.
 
 Use POST /v1/{platform}/listings/batch with items containing canonical URLs or supported native IDs (1–5), retaining existing selector requirements. Reserve 50 credits per item and charge only successful details. The existing Zillow native_ids batch contract is unchanged. Use POST /v1/observations/batch with resources containing a public read operation and returned ID (1–25); reserve 1 credit per item and charge only successful saved reads. Missing or expired observations remain per-item failures. No automatic retries or retention extension.
 
