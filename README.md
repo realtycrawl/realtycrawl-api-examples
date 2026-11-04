@@ -22,7 +22,23 @@ node examples/node/03-listing.mjs LISTING_ID
 # Or: python3 examples/python/03_listing.py LISTING_ID
 ```
 
-Check that the requested capability is active for your platform and country first. The sample searches use a contiguous-US Zillow sale bounding box, `limit=1`, and `X-Max-Credits: 50`. Each successful platform crawl costs 50 credits. Stored listing reads cost 1 credit and use observations owned by your account, expiring after 24 hours. Research inventory is not live coverage.
+Check that the requested capability is active for your platform and country first. The sample searches use a contiguous-US Zillow sale bounding box, `limit=1`, and `X-Max-Credits: 50`. Zillow searches cost 3 credits per returned listing; other successful platform crawls cost 50 credits. Stored listing reads cost 1 credit and use observations owned by your account, expiring after 24 hours. Research inventory is not live coverage.
+
+## Expanded Zillow workflows
+
+The [generated operation inventory](reference/operations.md) lists this release's complete operation IDs and routes. Current capabilities and the live OpenAPI remain authoritative. Expanded selectors and detail sections carry documentation-backed beta evidence and warnings.
+
+| Workflow | Request | Budget and evidence |
+|---|---|---|
+| Sale/rental/sold search | `POST /v1/zillow/listings/search` | 3 credits per returned listing; US bbox, documented price/bed/bath/living-area/property-type filters and sorts |
+| Fresh detail by ZPID | `GET /v1/zillow/listings/{native_id}` | 50 credits; optional `transaction=rent` or `status=sold` |
+| Bounded detail batch | `POST /v1/zillow/listings/batch` with `native_ids` | Reserve 50 per requested ID, charge successful items only; 1–5 unique numeric ZPIDs within a shared 50-second deadline |
+| Retained detail sections | `GET /v1/listings/{listing_id}/{facts,tax-history,schools,nearby,agent}` | 1 credit; collect supported fresh detail first; missing sections are unavailable |
+| Field selection and exports | Data routes with `fields` and `format` query options | Same source inputs and billing; JSON, CSV or NDJSON |
+
+Run `node examples/node/04-zillow-detail.mjs ZPID` for fresh detail, or `node examples/node/05-zillow-batch.mjs ZPID_ONE ZPID_TWO` for a batch. The batch example uses `REALTYCRAWL_IDEMPOTENCY_KEY`; inspect each item's status and error code, including `BATCH_DEADLINE_EXCEEDED`, before a deliberate retry. Run `node examples/node/06-listing-export.mjs LISTING_ID` or `python3 examples/python/04_listing_export.py LISTING_ID` to export retained facts.
+
+Node and Python clients accept `fields` and `format` in their parameters and place them in the query string for both GET and POST. Successful CSV/NDJSON responses return `{format, content, meta}` containing text, request ID, credits, row count and replay metadata. Errors retain structured JSON handling. Stored section reads preserve unknown price bases, school units/scales and source-reported tax evidence.
 
 Run examples individually. They do not retry or paginate automatically. Keep the same idempotency key and body for an identical retry after a connection failure; use a new key for a new logical request. The clients keep credentials on the RealtyCrawl origin, refuse redirects and use a 60-second timeout. Python and Node responses are bounded to 8 MiB.
 
@@ -42,4 +58,4 @@ Offline tests use synthetic data and mock transports. Live verification fetches 
 
 ## Release compatibility
 
-Source crawls cost 50 credits per successful platform; stored-observation reads cost 1 credit. Metadata and idempotent replays are free. `X-Max-Credits` is a maximum budget, not a charge; inspect the live operation contract and `X-Credits-Used` before quoting costs. Check platform-operation capabilities separately: documentation-backed beta coverage is callable but has not received fresh live source acceptance. Preserve its warnings.
+Zillow listing searches cost 3 credits per returned listing (default limit 10); fresh detail and successful batch items cost 50 each; other source crawls cost 50 credits per successful platform; stored-observation reads cost 1 credit. Metadata and idempotent replays are free. `X-Max-Credits` is a maximum budget, not a charge; inspect the live operation contract and `X-Credits-Used` before quoting costs. Check platform-operation capabilities separately: documentation-backed beta coverage is callable but has not received fresh live source acceptance. Preserve its warnings.
