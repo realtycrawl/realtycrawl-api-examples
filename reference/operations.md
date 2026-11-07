@@ -68,5 +68,8 @@ Generated from the application OpenAPI by `scripts/package-public-repos.mjs`. Th
 | resolveAddress | POST /v1/addresses/resolve | beta | successful_source_crawl |
 | getAddress | GET /v1/addresses/{address_id} | beta | stored_observation_read |
 | estimateProperty | POST /v1/properties/estimate | beta | successful_source_crawl |
+| searchPermits | POST /v1/permits/search | beta | successful_source_crawl |
+| getPropertyPermits | GET /v1/properties/{property_id}/permits | beta | stored_observation_read |
+| getMarketStatistics | GET /v1/markets/{market_id}/stats | beta | stored_observation_read |
 
 Response-only `fields` and `format` controls apply to data operations. They do not change source input or billing. Metadata is free; stored reads cost 1 credit. Zillow listing searches cost 3 credits per returned result; fresh details cost 50 per successful item. Source-detail batches reserve 50 credits per requested item (1–5); saved-observation batches reserve 1 per requested read (1–25). Failed items refund their reservation. Check operation pricing in the live contract.
